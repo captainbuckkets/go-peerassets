@@ -19,6 +19,8 @@ var(
 )
 
 func getAssets(w http.ResponseWriter, r *http.Request) {
+	log.Println("Getting Assets...")
+
 	w.Header().Set("Content-Type", "application/json")
 	j, _ := storage.GetDecks()
 	w.Write(j)
@@ -26,6 +28,8 @@ func getAssets(w http.ResponseWriter, r *http.Request) {
 }
 
 func postAssets(w http.ResponseWriter, r *http.Request) {
+	log.Println("Posting Assets...")
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(`{"message": "post called"}`))

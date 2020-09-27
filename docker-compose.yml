@@ -1,0 +1,32 @@
+version: '3.5'
+services:
+  peercoind:
+    image: peercoin/peercoind
+    restart: on-failure:20
+    ports:
+      - "19904:19904"
+    environment:
+      - RPC_USER=peercoind
+      - RPC_PASSWORD=peercoindrpc
+    volumes:
+      - /opt/go-peerassets/peercoin/:/data
+    command:
+      - -nominting
+      - -rpcallowip=0.0.0.0/0
+      - -testnet
+      - -txindex
+      - -walletnotify='/usr/local/bin/walletnotify.sh %s'
+      - -blocknotify='/usr/local/bin/blocknotify.sh %s'
+      - -rpcport=19904
+  go-peerassets:
+    restart: always
+    build: .
+    ports:
+      - "8089:8089"
+    depends_on:
+      - peercoind
+    environment:
+      - RPC_HOST=peercoind
+      - RPC_PORT=9904
+      - RPC_USERNAME=peercoind
+      - RPC_PASSWORD=peercoindrpc
